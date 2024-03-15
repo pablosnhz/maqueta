@@ -1,0 +1,101 @@
+[
+    {
+        "nivel": "Nivel 1",
+        "preguntas": [
+            {
+                "pregunta": "¿En qué película Bruce Willis interpreta a John McClane, un policía que se enfrenta a terroristas en un rascacielos?",
+                "opciones": {
+                    "La era del hielo": false,
+                    "Duro de Matar": true,
+                    "Difícil de Matar": false,
+                    "Riesgo Total": false
+                },
+                "respuesta": "la segunda"
+            },
+            {
+                "pregunta": "¿Quién dirigió la película 'Titanic'?",
+                "opciones": {
+                    "Martin Scorsese": false,
+                    "Steven Spielberg": false,
+                    "James Cameron": true,
+                    "Quentin Tarantino": false
+                },
+                "respuesta": "la tercera"
+            },
+            {
+                "pregunta": "¿En qué película aparece el personaje 'Forrest Gump'?",
+                "opciones": {
+                    "Pulp Fiction": false,
+                    "Salvar al Soldado Ryan": false,
+                    "Forrest Gump": true,
+                    "Sueño de Fuga": false
+                },
+                "respuesta": "la tercera"
+            }
+        ]
+    },
+    {
+        "nivel": "Nivel 2",
+        "preguntas": [
+            {
+                "pregunta": "¿Quién interpretó el papel de Neo en la película 'The Matrix'?",
+                "opciones": {
+                    "Keanu Reeves": true,
+                    "Brad Pitt": false,
+                    "Tom Cruise": false,
+                    "Will Smith": false
+                }
+            },
+            {
+                "pregunta": "¿En qué película se narra la historia de un niño huérfano que vive en la selva africana con un grupo de gorilas?",
+                "opciones": {
+                    "Tarzán": false,
+                    "La Selva Esmeralda": false,
+                    "George, el Rey de la Jungla": false,
+                    "Tarzán de los Monos": true
+                }
+            },
+            {
+                "pregunta": "¿Quién dirigió la película de animación 'El Rey León'?",
+                "opciones": {
+                    "Steven Spielberg": false,
+                    "James Cameron": false,
+                    "Walt Disney": false,
+                    "Roger Allers y Rob Minkoff": true
+                }
+            }
+        ]
+    },
+    {
+        "nivel": "Nivel 3",
+        "preguntas": [
+            {
+                "pregunta": "¿Cuál es la película que ganó el Premio Óscar a la Mejor Película en 1994?",
+                "opciones": {
+                    "Forrest Gump": false,
+                    "Pulp Fiction": false,
+                    "La Lista de Schindler": true,
+                    "Titanic": false
+                }
+            },
+            {
+                "pregunta": "¿En qué película Clint Eastwood interpreta a un cazarrecompensas llamado 'El Hombre sin Nombre'?",
+                "opciones": {
+                    "Por un Puñado de Dólares": true,
+                    "El Bueno, el Malo y el Feo": false,
+                    "La Muerte Tenía un Precio": false,
+                    "Sin Perdón": false
+                }
+            },
+            {
+                "pregunta": "¿Quién interpretó el papel de Tony Stark / Iron Man en el Universo Cinematográfico de Marvel?",
+                "opciones": {
+                    "Chris Evans": false,
+                    "Chris Hemsworth": false,
+                    "Robert Downey Jr.": true,
+                    "Mark Ruffalo": false
+                }
+            }
+        ]
+    }
+]

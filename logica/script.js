@@ -1,6 +1,7 @@
 let currentQuestionIndex = 0;
+let alertaMostrada = false;
 
-const questions = [
+const primerNivel = [
     {
         "pregunta": "¿En qué película Bruce Willis interpreta a John McClane, un policía que se enfrenta a terroristas en un rascacielos?",
         "opciones": {
@@ -33,8 +34,76 @@ const questions = [
     }
 ];
 
+const segundoNivel = [
+    {
+        "pregunta": "¿Cuál es la capital de Francia?",
+        "opciones": {
+            "Londres": false,
+            "París": true,
+            "Berlín": false,
+            "Madrid": false
+        },
+        "respuesta": "París"
+    },
+    {
+        "pregunta": "¿En qué año comenzó la Primera Guerra Mundial?",
+        "opciones": {
+            "1914": true,
+            "1918": false,
+            "1939": false,
+            "1945": false
+        },
+        "respuesta": "1914"
+    },
+    {
+        "pregunta": "¿Quién pintó la Mona Lisa?",
+        "opciones": {
+            "Leonardo da Vinci": true,
+            "Pablo Picasso": false,
+            "Vincent van Gogh": false,
+            "Claude Monet": false
+        },
+        "respuesta": "Leonardo da Vinci"
+    }
+];
+
+const tercerNivel = [
+    {
+        "pregunta": "¿Cuál es la película que ganó el Premio Óscar a la Mejor Película en 1994?",
+        "opciones": {
+            "Forrest Gump": false,
+            "Pulp Fiction": false,
+            "La Lista de Schindler": true,
+            "Titanic": false
+        },
+        "respuesta": "La lista de Schindler"
+    },
+    {
+        "pregunta": "¿En qué película Clint Eastwood interpreta a un cazarrecompensas llamado 'El Hombre sin Nombre'?",
+        "opciones": {
+            "Por un Puñado de Dólares": true,
+            "El Bueno, el Malo y el Feo": false,
+            "La Muerte Tenía un Precio": false,
+            "Sin Perdón": false
+        },
+        "respuesta": "Por un Puñado de Dólares"
+    },
+    {
+        "pregunta": "¿Quién interpretó el papel de Tony Stark / Iron Man en el Universo Cinematográfico de Marvel?",
+        "opciones": {
+            "Chris Evans": false,
+            "Chris Hemsworth": false,
+            "Robert Downey Jr.": true,
+            "Mark Ruffalo": false
+        },
+        "respuesta": "Robert Downey Jr."
+    }
+]
+
+// NIVEL 1
+
 function renderQuestion(index) {
-    const question = questions[index];
+    const question = primerNivel[index];
     const container = document.getElementById('questions-container');
     container.innerHTML = `
         <div class="question ml-sm-5 pl-sm-5 pt-2">
@@ -78,14 +147,24 @@ function saveSelectedAnswer(index, option) {
 
 function showNext() {
     saveSelectedAnswer();
-    currentQuestionIndex = Math.min(currentQuestionIndex + 1, questions.length - 1);
-    renderQuestion(currentQuestionIndex);
+    if (currentLevel === 1) {
+        currentQuestionIndex = Math.min(currentQuestionIndex + 1, primerNivel.length - 1);
+        renderQuestion(currentQuestionIndex);
+    } else if (currentLevel === 2) {
+        currentQuestionIndex = Math.min(currentQuestionIndex + 1, segundoNivel.length - 1);
+        renderQuestionSegundoNivel(currentQuestionIndex);
+    }
 }
 
 function showPrevious() {
     saveSelectedAnswer();
-    currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
-    renderQuestion(currentQuestionIndex);
+    if (currentLevel === 1) {
+        currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
+        renderQuestion(currentQuestionIndex);
+    } else if (currentLevel === 2) {
+        currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
+        renderQuestionSegundoNivel(currentQuestionIndex);
+    }
 }
 
 function saveSelectedAnswer() {
@@ -95,16 +174,13 @@ function saveSelectedAnswer() {
     }
 }
 
-
-// muestra la primera pregunta al cargar la pagina
+// mostamos en orden las preguntas
 renderQuestion(currentQuestionIndex);
-
-
 
 // * RESULTADO NIVELES
 function mostrarRespuestasIncorrectas() {
     let respuestasIncorrectas = [];
-    questions.forEach((pregunta, index) => {
+    primerNivel.forEach((pregunta, index) => {
         const respuestaUsuario = localStorage.getItem(`question_${index}`);
         if (respuestaUsuario !== pregunta.respuesta) {
             respuestasIncorrectas.push({ pregunta: pregunta.pregunta, respuestaCorrecta: pregunta.respuesta });
@@ -112,12 +188,191 @@ function mostrarRespuestasIncorrectas() {
     });
 
     if (respuestasIncorrectas.length > 0) {
-        alert('Tienes respuestas incorrectas.');
+        alert('Tienes respuestas incorrectas primer nivel.');
     } else {
-        alert('Todas las respuestas son correctas.');
+        alert('Todas las respuestas del primer nivel son correctas.');
+        if (todasRespuestasCorrectas()) {
+            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+            localStorage.setItem('nivel_desbloqueado', true);
+        }
+    }
+}
+
+window.onload = function () {
+    const nivelDesbloqueado = localStorage.getItem('nivel_desbloqueado');
+    if (nivelDesbloqueado === 'true') {
+        document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        document.getElementById('nivelDos').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        document.getElementById('nivelTres').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+    }
+}
+
+// Verificar si todas las respuestas del nivel 1 son correctas
+function todasRespuestasCorrectas() {
+    return primerNivel.every((pregunta, index) => {
+        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        return respuestaUsuario === pregunta.respuesta;
+    });
+}
+
+window.onload = function () {
+    const currentUrl = window.location.href;
+
+
+    // verificamos si el nivel esta completado para marcar con check que esta finalizado
+    if (currentUrl.includes("matematicaNivelUno")) {
+        currentLevel = 1;
+        renderQuestion(currentQuestionIndex);
+        if (localStorage.getItem('nivel_desbloqueado') === 'true') {
+            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        }
+    } else if (currentUrl.includes("matematicaNivelDos")) {
+        currentLevel = 2;
+        renderQuestionSegundoNivel(currentQuestionIndex);
+        if (localStorage.getItem('nivel_desbloqueado') === 'true') {
+            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        }
     }
 }
 
 document.getElementById('mostrarRespuestasBtn').addEventListener('click', function(){
-    mostrarRespuestasIncorrectas();
-})
+    if (currentLevel === 1) {
+        mostrarRespuestasIncorrectas();
+    } else if (currentLevel === 2) {
+        mostrarRespuestasIncorrectasSegundoNivel();
+    }
+});
+
+// Muestra la primera pregunta del segundo nivel al cargar la página
+renderQuestionSegundoNivel(currentQuestionIndex);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// SEGUNDO NIVEL
+
+let currentLevel = 1;
+
+// Funciones para el Segundo Nivel
+function renderQuestionSegundoNivel(index) {
+    const question = segundoNivel[index];
+    const container = document.getElementById('questions-container');
+    container.innerHTML = `
+        <div class="question ml-sm-5 pl-sm-5 pt-2">
+            <div class="py-2 h5"><b>${question.pregunta}</b></div>
+            <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                ${renderOptionsSegundoNivel(question.opciones, index)}
+            </div>
+        </div>
+    `;
+    const containers = document.getElementById('respuestaJson');
+    containers.textContent = question.respuesta;
+
+    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    if (selectedAnswer) {
+        const radioInput = container.querySelector(`input[value="${selectedAnswer}"]`);
+        if (radioInput) {
+            radioInput.checked = true;
+        }
+    }
+}
+
+function saveSelectedAnswerSegundoNivel(index, option) {
+    localStorage.setItem(`question_${index}`, option);
+}
+
+function showNextSegundoNivel() {
+    saveSelectedAnswerSegundoNivel();
+    currentQuestionIndex = Math.min(currentQuestionIndex + 1, segundoNivel.length - 1);
+    renderQuestionSegundoNivel(currentQuestionIndex);
+}
+
+function showPreviousSegundoNivel() {
+    saveSelectedAnswerSegundoNivel();
+    currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
+    renderQuestionSegundoNivel(currentQuestionIndex);
+}
+
+function saveSelectedAnswerSegundoNivel() {
+    const selectedAnswer = document.querySelector('input[name="radio"]:checked');
+    if (selectedAnswer) {
+        localStorage.setItem(`question_${currentQuestionIndex}`, selectedAnswer.value);
+    }
+}
+
+function renderOptionsSegundoNivel(options, index) {
+    let html = '';
+    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    for (const option in options) {
+        const checked = option === selectedAnswer ? 'checked' : '';
+        html += `
+            <label class="options">${option}
+                <input type="radio" name="radio" value="${option}" ${checked} onchange="saveSelectedAnswerSegundoNivel(${index}, '${option}')">
+                <span class="checkmark"></span>
+            </label>
+        `;
+    }
+    return html;
+}
+
+// * RESULTADO NIVELES
+function mostrarRespuestasIncorrectasSegundoNivel() {
+    let respuestasIncorrectas = [];
+    segundoNivel.forEach((pregunta, index) => {
+        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        if (respuestaUsuario !== pregunta.respuesta) {
+            respuestasIncorrectas.push({ pregunta: pregunta.pregunta, respuestaCorrecta: pregunta.respuesta });
+        }
+    });
+
+    if (respuestasIncorrectas.length > 0 && !alertaMostrada) {
+        alert('Tienes respuestas incorrectas en el segundo nivel.');
+        alertaMostrada = true; // Establecer la bandera para indicar que la alerta se ha mostrado
+    } else if (respuestasIncorrectas.length === 0 && !alertaMostrada) {
+        alert('Todas las respuestas del segundo nivel son correctas.');
+        document.getElementById('nivelDos').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        localStorage.setItem('nivel_desbloqueado', true);
+        alertaMostrada = true; // Establecer la bandera para indicar que la alerta se ha mostrado
+    }
+}
+
+// * Desbloqueo de nivel 
+function todasRespuestasCorrectasSegundoNivel() {
+    return segundoNivel.every((pregunta, index) => {
+        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        return respuestaUsuario === pregunta.respuesta;
+    });
+}
+
+document.getElementById('mostrarRespuestasBtn').addEventListener('click', function(){
+    mostrarRespuestasIncorrectasSegundoNivel();
+});
+
+// Muestra la primera pregunta del segundo nivel al cargar la página
+renderQuestionSegundoNivel(currentQuestionIndex);
+
+
+
+// TERCER NIVEL 
+

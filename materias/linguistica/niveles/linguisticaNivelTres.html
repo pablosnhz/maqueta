@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Matematicas - Nivel 2</title>
+    <title>Matematicas - Nivel 3</title>
     <link rel="stylesheet" href="./../../../estilo/style.css">
 
 <body>
@@ -17,7 +17,7 @@
                     <div class="navbar-nav mx-auto">
                         <ul class="navbar-nav gap-nav">
                             <li class="nav-item px-3">
-                                <a class="nav-link letra-nav" href="./matematica.html">Matematicas</a>
+                                <a class="nav-link letra-nav" href="../linguistica.html">Linguistica</a>
                             </li>
                             <li class="mt-1 px-4">
                                 <img class="user-icon" src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA0L3BmLWljb240LWppcjIwNjItcG9yLWwtam9iNzg4LnBuZw.png" alt="">
@@ -58,6 +58,8 @@
                             </div>
                         </div>
 
+                        <div id="temporizador">30</div>
+
                         <div class="d-flex justify-content-between align-items-center mt-5">
                             <!-- MODAL -->
                             <div>
@@ -82,10 +84,10 @@
                             <!-- FIN MODAL -->
                             <div class="d-flex align-items-center">
                                 <div id="prev">
-                                    <button class="btn btn-primary" onclick="showPreviousSegundoNivel()">Previous</button>
+                                    <button class="btn btn-primary" onclick="showPreviousTercerNivel()">Previous</button>
                                 </div>
                                 <div class="ml-auto mr-sm-5">
-                                    <button class="btn btn-success" onclick="showNextSegundoNivel()">Next</button>
+                                    <button class="btn btn-success" onclick="showNextTercerNivel()">Next</button>
                                 </div>
                             </div>
                             <div>
@@ -119,7 +121,7 @@
 
                 <div class="separator"></div>
                 <div class="col-md-5 mt-4 text-center">
-                    <h3>Algebra Nivel 2</h3>
+                    <h3>Linguistica 3</h3>
                     <p>El álgebra es la rama de la matemática que estudia la combinación de elementos de estructuras abstractas acorde a ciertas reglas.3​ Originalmente esos elementos podían ser interpretados como números o cantidades, por lo que el álgebra en cierto modo fue originalmente una generalización y extensión de la aritmética.4​5​ En el álgebra moderna existen áreas del álgebra que en modo alguno pueden considerarse extensiones de la aritmética (álgebra abstracta, álgebra homológica, álgebra exterior, etc.).</p>
                     <p>Las cuatro operaciones básicas (o elementales) de la aritmética son:
                         
@@ -132,31 +134,30 @@
             </div>
         </div>
      
-            <div class="image-mat-niveluno">
-                <a href="./matematicaNivelUno.html" class="cursor-pointer">
-                    <div id="nivelUno">
-                        <img src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" class="img-fluid">
-                        <a>Nivel 1</a>
-                    </div>
-                </a>
-                <a href="./matematicaNivelDos.html" class="cursor-pointer">
-                    <div id="nivelDos">
-                        <img  src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" class="img-fluid">
-                        <a>Nivel 2</a>
-                    </div>
-                </a>
-                <a href="./matematicaNivelTres.html" class="cursor-pointer">
-                    <div id="nivelTres">
-                        <img  src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" 
-                        class="img-fluid">
-                        <a>Nivel 3</a>
-                    </div>
-                </a>
-            </div>
+        <div class="image-mat-niveluno">
+            <a href="./linguisticaNivelUno.html" class="cursor-pointer">
+                <div id="nivelUnoLin">
+                    <img src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" class="img-fluid">
+                    <a>Nivel 1</a>
+                </div>
+            </a>
+            <a href="./linguisticaNivelDos.html" class="cursor-pointer">
+                <div id="nivelDosLin">
+                    <img  src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" class="img-fluid">
+                    <a>Nivel 2</a>
+                </div>
+            </a>
+            <a href="./linguisticaNivelTres.html" class="cursor-pointer">
+                <div id="nivelTresLin">
+                    <img  src="https://icones.pro/wp-content/uploads/2022/08/icone-de-cadenas-de-securite-gris.png" class="img-fluid">
+                    <a>Nivel 3</a>
+                </div>
+            </a>
+        </div>
 
             
             
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="./../../matematica/logica/script.js"></script>
+    <script src="../../linguistica/logica/logicaLinguistica.js"></script>
 </body>
 </html>

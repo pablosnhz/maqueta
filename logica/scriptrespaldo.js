@@ -117,7 +117,7 @@ function renderQuestion(index) {
     containers.textContent = question.respuesta;
 
 
-    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    const selectedAnswer = localStorage.getItem(`question_primer_${index}`);
     if (selectedAnswer) {
         const radioInput = container.querySelector(`input[value="${selectedAnswer}"]`);
         if (radioInput) {
@@ -128,7 +128,7 @@ function renderQuestion(index) {
 
 function renderOptions(options, index) {
     let html = '';
-    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    const selectedAnswer = localStorage.getItem(`question_primer_${index}`);
     for (const option in options) {
         const checked = option === selectedAnswer ? 'checked' : '';
         html += `
@@ -142,37 +142,29 @@ function renderOptions(options, index) {
 }
 
 function saveSelectedAnswer(index, option) {
-    localStorage.setItem(`question_${index}`, option);
+    localStorage.setItem(`question_primer_${index}`, option); 
 }
 
 function showNext() {
-    saveSelectedAnswer();
-    if (currentLevel === 1) {
-        currentQuestionIndex = Math.min(currentQuestionIndex + 1, primerNivel.length - 1);
-        renderQuestion(currentQuestionIndex);
-    } else if (currentLevel === 2) {
-        currentQuestionIndex = Math.min(currentQuestionIndex + 1, segundoNivel.length - 1);
-        renderQuestionSegundoNivel(currentQuestionIndex);
+    const selectedAnswer = document.querySelector('input[name="radio"]:checked')?.value;
+    if (selectedAnswer) {
+        saveSelectedAnswer(currentQuestionIndex, selectedAnswer);
     }
+    
+    currentQuestionIndex = Math.min(currentQuestionIndex + 1, primerNivel.length - 1);
+    renderQuestion(currentQuestionIndex);
 }
 
 function showPrevious() {
-    saveSelectedAnswer();
-    if (currentLevel === 1) {
-        currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
-        renderQuestion(currentQuestionIndex);
-    } else if (currentLevel === 2) {
-        currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
-        renderQuestionSegundoNivel(currentQuestionIndex);
+    const selectedAnswer = document.querySelector('input[name="radio"]:checked')?.value;
+    if (selectedAnswer) {
+        saveSelectedAnswer(currentQuestionIndex, selectedAnswer);
     }
+    
+    currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
+    renderQuestion(currentQuestionIndex);
 }
 
-function saveSelectedAnswer() {
-    const selectedAnswer = document.querySelector('input[name="radio"]:checked');
-    if (selectedAnswer) {
-        localStorage.setItem(`question_${currentQuestionIndex}`, selectedAnswer.value);
-    }
-}
 
 // mostamos en orden las preguntas
 renderQuestion(currentQuestionIndex);
@@ -181,7 +173,7 @@ renderQuestion(currentQuestionIndex);
 function mostrarRespuestasIncorrectas() {
     let respuestasIncorrectas = [];
     primerNivel.forEach((pregunta, index) => {
-        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        const respuestaUsuario = localStorage.getItem(`question_primer_${index}`);
         if (respuestaUsuario !== pregunta.respuesta) {
             respuestasIncorrectas.push({ pregunta: pregunta.pregunta, respuestaCorrecta: pregunta.respuesta });
         }
@@ -191,26 +183,14 @@ function mostrarRespuestasIncorrectas() {
         alert('Tienes respuestas incorrectas primer nivel.');
     } else {
         alert('Todas las respuestas del primer nivel son correctas.');
-        if (todasRespuestasCorrectas()) {
-            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-            localStorage.setItem('nivel_desbloqueado', true);
-        }
-    }
-}
-
-window.onload = function () {
-    const nivelDesbloqueado = localStorage.getItem('nivel_desbloqueado');
-    if (nivelDesbloqueado === 'true') {
+        localStorage.setItem('nivel_desbloqueado', true);
         document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-        document.getElementById('nivelDos').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-        document.getElementById('nivelTres').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
     }
 }
 
-// Verificar si todas las respuestas del nivel 1 son correctas
 function todasRespuestasCorrectas() {
     return primerNivel.every((pregunta, index) => {
-        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        const respuestaUsuario = localStorage.getItem(`question_primer_${index}`);
         return respuestaUsuario === pregunta.respuesta;
     });
 }
@@ -218,20 +198,26 @@ function todasRespuestasCorrectas() {
 window.onload = function () {
     const currentUrl = window.location.href;
 
+    if (localStorage.getItem('nivel_desbloqueado') === 'true') {
+        document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+    }
+    if (localStorage.getItem('nivel_desbloqueado_segundo') === 'true') {
+        document.getElementById('nivelDos').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+    }
+    if (localStorage.getItem('nivel_desbloqueado_tercer') === 'true') {
+        document.getElementById('nivelTres').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+    }
 
-    // verificamos si el nivel esta completado para marcar con check que esta finalizado
+    // Verificamos en qué nivel nos encontramos
     if (currentUrl.includes("matematicaNivelUno")) {
         currentLevel = 1;
         renderQuestion(currentQuestionIndex);
-        if (localStorage.getItem('nivel_desbloqueado') === 'true') {
-            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-        }
     } else if (currentUrl.includes("matematicaNivelDos")) {
         currentLevel = 2;
         renderQuestionSegundoNivel(currentQuestionIndex);
-        if (localStorage.getItem('nivel_desbloqueado') === 'true') {
-            document.getElementById('nivelUno').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-        }
+    } else if (currentUrl.includes("matematicaNivelTres")) {
+        currentLevel = 3;
+        renderQuestionTercerNivel(currentQuestionIndex);
     }
 }
 
@@ -240,10 +226,22 @@ document.getElementById('mostrarRespuestasBtn').addEventListener('click', functi
         mostrarRespuestasIncorrectas();
     } else if (currentLevel === 2) {
         mostrarRespuestasIncorrectasSegundoNivel();
+    } else if (currentLevel === 3){
+        mostrarRespuestasIncorrectasTercerNivel();
     }
 });
 
-// Muestra la primera pregunta del segundo nivel al cargar la página
+document.getElementById('mostrarRespuestasBtn').addEventListener('click', function(){
+    if (currentLevel === 1) {
+        mostrarRespuestasIncorrectas();
+    } else if (currentLevel === 2) {
+        mostrarRespuestasIncorrectasSegundoNivel();
+    } else if (currentLevel === 3){
+        mostrarRespuestasIncorrectasTercerNivel();
+    }
+
+});
+
 renderQuestionSegundoNivel(currentQuestionIndex);
 
 
@@ -274,7 +272,6 @@ renderQuestionSegundoNivel(currentQuestionIndex);
 
 let currentLevel = 1;
 
-// Funciones para el Segundo Nivel
 function renderQuestionSegundoNivel(index) {
     const question = segundoNivel[index];
     const container = document.getElementById('questions-container');
@@ -289,7 +286,7 @@ function renderQuestionSegundoNivel(index) {
     const containers = document.getElementById('respuestaJson');
     containers.textContent = question.respuesta;
 
-    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    const selectedAnswer = localStorage.getItem(`question_segundo_${index}`);
     if (selectedAnswer) {
         const radioInput = container.querySelector(`input[value="${selectedAnswer}"]`);
         if (radioInput) {
@@ -299,7 +296,7 @@ function renderQuestionSegundoNivel(index) {
 }
 
 function saveSelectedAnswerSegundoNivel(index, option) {
-    localStorage.setItem(`question_${index}`, option);
+    localStorage.setItem(`question_segundo_${index}`, option);
 }
 
 function showNextSegundoNivel() {
@@ -317,7 +314,7 @@ function showPreviousSegundoNivel() {
 function saveSelectedAnswerSegundoNivel() {
     const selectedAnswer = document.querySelector('input[name="radio"]:checked');
     if (selectedAnswer) {
-        localStorage.setItem(`question_${currentQuestionIndex}`, selectedAnswer.value);
+        localStorage.setItem(`question_segundo_${currentQuestionIndex}`, selectedAnswer.value);
     }
 }
 
@@ -340,7 +337,7 @@ function renderOptionsSegundoNivel(options, index) {
 function mostrarRespuestasIncorrectasSegundoNivel() {
     let respuestasIncorrectas = [];
     segundoNivel.forEach((pregunta, index) => {
-        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        const respuestaUsuario = localStorage.getItem(`question_segundo_${index}`);
         if (respuestaUsuario !== pregunta.respuesta) {
             respuestasIncorrectas.push({ pregunta: pregunta.pregunta, respuestaCorrecta: pregunta.respuesta });
         }
@@ -348,19 +345,19 @@ function mostrarRespuestasIncorrectasSegundoNivel() {
 
     if (respuestasIncorrectas.length > 0 && !alertaMostrada) {
         alert('Tienes respuestas incorrectas en el segundo nivel.');
-        alertaMostrada = true; // Establecer la bandera para indicar que la alerta se ha mostrado
+        alertaMostrada = true; 
     } else if (respuestasIncorrectas.length === 0 && !alertaMostrada) {
         alert('Todas las respuestas del segundo nivel son correctas.');
         document.getElementById('nivelDos').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
-        localStorage.setItem('nivel_desbloqueado', true);
-        alertaMostrada = true; // Establecer la bandera para indicar que la alerta se ha mostrado
+        localStorage.setItem('nivel_desbloqueado_segundo', true);
+        alertaMostrada = true;
     }
 }
 
 // * Desbloqueo de nivel 
 function todasRespuestasCorrectasSegundoNivel() {
     return segundoNivel.every((pregunta, index) => {
-        const respuestaUsuario = localStorage.getItem(`question_${index}`);
+        const respuestaUsuario = localStorage.getItem(`question_segundo_${index}`);
         return respuestaUsuario === pregunta.respuesta;
     });
 }
@@ -369,10 +366,132 @@ document.getElementById('mostrarRespuestasBtn').addEventListener('click', functi
     mostrarRespuestasIncorrectasSegundoNivel();
 });
 
-// Muestra la primera pregunta del segundo nivel al cargar la página
 renderQuestionSegundoNivel(currentQuestionIndex);
 
 
 
-// TERCER NIVEL 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// NIVEL 3
+
+function renderQuestionTercerNivel(index) {
+    const question = tercerNivel[index];
+    const container = document.getElementById('questions-container');
+    container.innerHTML = `
+        <div class="question ml-sm-5 pl-sm-5 pt-2">
+            <div class="py-2 h5"><b>${question.pregunta}</b></div>
+            <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                ${renderOptionsTercerNivel(question.opciones, index)}
+            </div>
+        </div>
+    `;
+    const containers = document.getElementById('respuestaJson');
+    containers.textContent = question.respuesta;
+
+    const selectedAnswer = localStorage.getItem(`question_${index}`);
+    if (selectedAnswer) {
+        const radioInput = container.querySelector(`input[value="${selectedAnswer}"]`);
+        if (radioInput) {
+            radioInput.checked = true;
+        }
+    }
+}
+
+function saveSelectedAnswerTercerNivel(index, option) {
+    localStorage.setItem(`question_tercer_${index}`, option);
+}
+
+function showNextTercerNivel() {
+    const selectedAnswer = document.querySelector('input[name="radio"]:checked');
+    if (selectedAnswer) {
+        saveSelectedAnswerTercerNivel(currentQuestionIndex, selectedAnswer.value);
+    }
+    currentQuestionIndex = Math.min(currentQuestionIndex + 1, tercerNivel.length - 1);
+    renderQuestionTercerNivel(currentQuestionIndex);
+}
+
+function showPreviousTercerNivel() {
+    const selectedAnswer = document.querySelector('input[name="radio"]:checked');
+    if (selectedAnswer) {
+        saveSelectedAnswerTercerNivel(currentQuestionIndex, selectedAnswer.value);
+    }
+    currentQuestionIndex = Math.max(currentQuestionIndex - 1, 0);
+    renderQuestionTercerNivel(currentQuestionIndex);
+}
+
+
+
+
+
+
+function renderOptionsTercerNivel(options, index) {
+    let html = '';
+    const selectedAnswer = localStorage.getItem(`question_tercer_${index}`);
+    for (const option in options) {
+        const checked = option === selectedAnswer ? 'checked' : '';
+        html += `
+            <label class="options">${option}
+                <input type="radio" name="radio" value="${option}" ${checked} onchange="saveSelectedAnswerTercerNivel(${index}, '${option}')">
+                <span class="checkmark"></span>
+            </label>
+        `;
+    }
+    return html;
+}
+
+
+// * RESULTADO NIVELES
+function mostrarRespuestasIncorrectasTercerNivel() {
+    let respuestasIncorrectas = [];
+    tercerNivel.forEach((pregunta, index) => {
+        const respuestaUsuario = localStorage.getItem(`question_tercer_${index}`).toLowerCase();
+        const respuestaCorrecta = pregunta.respuesta.toLowerCase();
+        if (respuestaUsuario !== respuestaCorrecta) {
+            respuestasIncorrectas.push({ pregunta: pregunta.pregunta, respuestaCorrecta: pregunta.respuesta });
+        }
+    });
+
+    if (respuestasIncorrectas.length > 0) {
+        alert('Tienes respuestas incorrectas en el tercer nivel.');
+        alertaMostrada = true; 
+    } else {
+        alert('Todas las respuestas del tercer nivel son correctas.');
+        document.getElementById('nivelTres').querySelector('img').src = 'https://cdn-icons-png.freepik.com/256/5610/5610944.png';
+        localStorage.setItem('nivel_desbloqueado_tercer', true);
+        alertaMostrada = true; 
+    }
+}
+
+// * Desbloqueo de nivel 
+function todasRespuestasCorrectasTercerNivel() {
+    return tercerNivel.every((pregunta, index) => {
+        const respuestaUsuario = localStorage.getItem(`question_tercer_${index}`);
+        return respuestaUsuario === pregunta.respuesta;
+    });
+}
+
+
+document.getElementById('mostrarRespuestasBtn').addEventListener('click', function(){
+    mostrarRespuestasIncorrectasTercerNivel();
+});
+
+renderQuestionTercerNivel(currentQuestionIndex);
+
+
+
 
